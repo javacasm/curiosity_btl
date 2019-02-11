@@ -74,14 +74,21 @@ Como se va a controlar por Bluetooth vamos a hacer un programa que permita contr
 
 Control de velocidad y giro por movimiento
    w
- a s d
+   s 
    x
 
 **w** acelera los 6 motores
-**a** gira a la derecha (motores izd atras, drchos adelante)
 **s** detiene en seco
-**d** gira a la izda (motores izd adelante, drchos atras)
 **x** ralentiza los 6 motores
+
+
+o Mueve los servos para girar a la izquierda \ \
+                                               / /
+
+p Mueve los servos para girar a la derecha / /
+                                           \ \ 
+
+### Control individual más fino
 
 Control de giro de los servos
 
@@ -99,6 +106,10 @@ V/v   B/b
 
 Controla la velocidad de cada uno de los 6 motores (incrementa/decrementa la velocidad) 
 
+### Giro en el sitio
+
+**a** gira a la derecha (motores izd atras, drchos adelante)
+**d** gira a la izda (motores izd adelante, drchos atras)
 
 ### Detalles del programa
 
