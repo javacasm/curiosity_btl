@@ -1,3 +1,7 @@
+// V1 versión 1 del software de control de la maqueta de curiosity btl de @felixstdp
+// by @javacasm
+// Licencia CC
+
 
 #include <Servo.h>
 
