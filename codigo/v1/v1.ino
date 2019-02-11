@@ -65,7 +65,7 @@ Bluetooth 0,1
 
 Servo s1,s2,s3,s4;
 
-int pinesMotores[] = {M1_1,M1,2,M2_1,M2_2,M3_1,M3_2,M4_1,M4_2,M5_1,M5_2,M6_1,M6_2};
+int pinesMotores[] = {M1_1,M1_2,M2_1,M2_2,M3_1,M3_2,M4_1,M4_2,M5_1,M5_2,M6_1,M6_2};
 
 
 void setup(){
@@ -110,10 +110,10 @@ int pasoVelocidad = 5; // Usaremos este incremento
 void setSpeed(int pin1,int pin2,int speed){
     if(speed > 0){
         analogWrite(pin1,speed);
-        analogWrite(pin2,0)
+        analogWrite(pin2,0);
     } else {
         analogWrite(pin2,speed);
-        analogWrite(pin1,0)
+        analogWrite(pin1,0);
     }
     
 }
@@ -146,7 +146,7 @@ p Mueve los servos para girar a la derecha / /
                                            \ \ 
 */
 
-    if(Seria.available()>0){
+    if(Serial.available()>0){
         char caracter = Serial.read();
         switch(caracter){
             case 'o': // Mas giro a la izquierda
@@ -155,31 +155,31 @@ p Mueve los servos para girar a la derecha / /
                 posS3 += pasoServo;
                 posS2 += pasoServo;
                 break;
-            case 'o': // Mas giro a la derecha
+            case 'p': // Mas giro a la derecha
                 posS1 += pasoServo;
                 posS4 += pasoServo;
                 posS3 -= pasoServo;
                 posS2 -= pasoServo;
                 break;
-            case 's':
-                velocidad = 0;
-                break;
             case 'w':
                 velocidad += pasoVelocidad;
                 break;
-            case 'w':
+            case 's':
+                velocidad = 0;
+                break;                
+            case 'x':
                 velocidad -= pasoVelocidad;
                 break;
         }
         // Vemos si nos hemos pasado de posiciones
-        if(poS1 < 0) posS1 = 0;
-        if(poS2 < 0) posS2 = 0;
-        if(poS3 < 0) posS3 = 0;
-        if(poS4 < 0) posS4 = 0;
-        if(poS1 > 180) posS1 = 180;
-        if(poS2 > 180) posS2 = 180;
-        if(poS3 > 180) posS3 = 180;
-        if(poS4 > 180) posS4 = 180;
+        if(posS1 < 0) posS1 = 0;
+        if(posS2 < 0) posS2 = 0;
+        if(posS3 < 0) posS3 = 0;
+        if(posS4 < 0) posS4 = 0;
+        if(posS1 > 180) posS1 = 180;
+        if(posS2 > 180) posS2 = 180;
+        if(posS3 > 180) posS3 = 180;
+        if(posS4 > 180) posS4 = 180;
         
         // Vemos si nos pasamos en las velocidades
         if(velocidad > 255 ) velocidad = 255;
