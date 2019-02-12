@@ -9,34 +9,23 @@
 
 /*  Esquema electrico  
     
-    M1 S1          S4 M6
-     \                /
-     L9110.1    L9110.3
-     /                \
-    M2                M5
-       ____L9110.2___    
-      /              \  
-    M3 S2          S3 M4
+    M1 S1       S4 M6
+      \           /
+    M2-\__L9110__/-M5
+      /          \
+     /            \ 
+    M3 S2       S3 M4
 
-L9110.1 
-    M1 13 y 12
-    M2 11 y 10
-    
-    
-L9110.2 
-    M5 9 y 8
-    M6 7 y 6
+L9110
+    M1 9 y 10
+    M2 5 y 6
+ 
     
 
-L9110.3 
-    M3 5 y 4
-    M4 3 y 2
-    
-
-S1 A0
-S2 A1
-S3 A3
-S4 A4
+S1 11
+S2 12
+S3 7
+S4 8
 
 
 Bluetooth 0,1
@@ -47,29 +36,21 @@ Bluetooth 0,1
 
 // Pines de control de los motores
 
-#define M1_1 13
-#define M1_2 12
-#define M2_1 11
-#define M2_2 10
-#define M5_1  9
-#define M5_2  8
-#define M6_1  7
-#define M6_2  6
-#define M3_1  5
-#define M3_2  4
-#define M4_1  3
-#define M4_2  4
+#define M1_1  9
+#define M1_2 10
+#define M2_1  5
+#define M2_2  6
+
 
 // Pines de control de los servos
 
-#define S1 A0
-#define S2 A1
-#define S3 A2
-#define S4 A3
+#define S1 11
+#define S2 12
+#define S3 7
+#define S4 8
 
 Servo s1,s2,s3,s4;
 
-int pinesMotores[] = {M1_1,M1_2,M2_1,M2_2,M3_1,M3_2,M4_1,M4_2,M5_1,M5_2,M6_1,M6_2};
 
 
 void setup(){
@@ -79,14 +60,7 @@ void setup(){
     pinMode(M1_2,OUTPUT);
     pinMode(M2_1,OUTPUT);
     pinMode(M2_2,OUTPUT);
-    pinMode(M5_1,OUTPUT);
-    pinMode(M5_2,OUTPUT);
-    pinMode(M6_1,OUTPUT);
-    pinMode(M6_2,OUTPUT);
-    pinMode(M3_1,OUTPUT);
-    pinMode(M3_2,OUTPUT);
-    pinMode(M4_1,OUTPUT);
-    pinMode(M4_2,OUTPUT);
+
 
     // Configuramos los pines de los servos como salida
     pinMode(S1,OUTPUT);
@@ -98,12 +72,13 @@ void setup(){
     Serial.begin(9600);
 
     // Configuramos los servos
-    
     s1.attach(S1);
     s2.attach(S2);
     s3.attach(S3);
     s4.attach(S4);
 
+
+   showState();
 }
 
 // La velocidad va desde -255 a 255, con valores negativos moviendose hacia atras 
@@ -127,6 +102,25 @@ int posS1 = 90, posS2 = 90, posS3 = 90, posS4 = 90;
 int pasoServo = 5; // Incremento de posicion de los servos
   
 
+void showState(){
+   Serial.println("w acelera los 6 motores");
+   Serial.println("s detiene en seco");
+   Serial.println("x ralentiza los 6 motores");
+   Serial.println("i Mueve los servos para girar a la izquierda \\ \\");
+   Serial.println("                                             / /");
+   Serial.println("o Pone los servos a 0 | |");
+   Serial.println("                      | |");
+   Serial.println("p Mueve los servos para girar a la derecha / /");
+   Serial.println("                                           \\ \\ ");
+   Serial.println("");
+    Serial.print("velocidad = ");
+    Serial.println(velocidad);
+    Serial.print("S1,S4 = ");
+    Serial.println(posS1);
+    Serial.print("S2,S3 = ");
+    Serial.println(posS2); 
+}
+
 
 void loop(){
 
@@ -143,22 +137,33 @@ Control de velocidad y giro por movimiento
 
 Control de giro usando los servos
 
-o Mueve los servos para girar a la izquierda \ \
+i Mueve los servos para girar a la izquierda \ \
                                                / /
+
+o Pone los servos a 0
 
 p Mueve los servos para girar a la derecha / /
                                            \ \ 
 */
 
     if(Serial.available()>0){
+      Serial.println("reading");
         char caracter = Serial.read();
+        Serial.print("reading:");
+        Serial.println(caracter);
         switch(caracter){
-            case 'o': // Mas giro a la izquierda
+            case 'i': // Mas giro a la izquierda
                 posS1 -= pasoServo;
                 posS4 -= pasoServo;
                 posS3 += pasoServo;
                 posS2 += pasoServo;
                 break;
+            case 'o':
+                posS1 = 90;
+                posS2 = 90;
+                posS3 = 90;
+                posS4 = 90;
+                break;                
             case 'p': // Mas giro a la derecha
                 posS1 += pasoServo;
                 posS4 += pasoServo;
@@ -198,16 +203,11 @@ p Mueve los servos para girar a la derecha / /
         
         // Establecemos la velocidad
         
-        for(int i = 0; i < 12; i += 2){
-            setSpeed(pinesMotores[i],pinesMotores[i + 1], velocidad);
-        }
+        setSpeed(M1_1,M1_2, velocidad);
+        setSpeed(M2_1,M2_2, velocidad);
+
         
-        Serial.print("velocidad = ");
-        Serial.println(velocidad);
-        Serial.print("S1,S4 = ");
-        Serial.println(posS1);
-        Serial.print("S2,S3 = ");
-        Serial.println(posS2);        
+        showState();       
         
     }    
 }
