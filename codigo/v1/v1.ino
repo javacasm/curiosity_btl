@@ -2,6 +2,7 @@
 // by @javacasm
 // Licencia CC
 
+//#include <BitbloqSoftwareSerial.h>
 
 #include <Servo.h>
 
@@ -22,10 +23,10 @@ L9110
  
     
 
-S1 11
-S2 12
-S3 7
-S4 8
+S1 12
+S2  8
+S3  7
+S4  2
 
 
 Bluetooth 0,1
@@ -36,22 +37,22 @@ Bluetooth 0,1
 
 // Pines de control de los motores
 
-#define M1_1  9
-#define M1_2 10
+#define M1_1 11
+#define M1_2  6
 #define M2_1  5
-#define M2_2  6
+#define M2_2  3
 
 
 // Pines de control de los servos
 
-#define S1 11
-#define S2 12
-#define S3 7
-#define S4 8
+#define S1 12
+#define S2  8
+#define S3  7
+#define S4  2
 
 Servo s1,s2,s3,s4;
 
-
+//bqSoftwareSerial bluetooth_de_la_placa(0, 1, 19200);
 
 void setup(){
 
@@ -69,7 +70,8 @@ void setup(){
     pinMode(S4,OUTPUT);
 
     // Configuramos las comunicaciones
-    Serial.begin(9600);
+    Serial.begin(19200);
+    //bluetooth_de_la_placa.begin(19200);
 
     // Configuramos los servos
     s1.attach(S1);
@@ -77,13 +79,16 @@ void setup(){
     s3.attach(S3);
     s4.attach(S4);
 
+   setServosInitialState();
 
+   setState();
+   
    showState();
 }
 
 // La velocidad va desde -255 a 255, con valores negativos moviendose hacia atras 
 int velocidad = 0;
-int pasoVelocidad = 5; // Usaremos este incremento
+int pasoVelocidad = 10; // Usaremos este incremento
 
 // Nos permite dar velocidad a cada motor
 void setSpeed(int pin1,int pin2,int speed){
@@ -91,28 +96,35 @@ void setSpeed(int pin1,int pin2,int speed){
         analogWrite(pin1,speed);
         analogWrite(pin2,0);
     } else {
-        analogWrite(pin2,speed);
+        analogWrite(pin2, - speed);
         analogWrite(pin1,0);
     }
     
 }
 
 
-int posS1 = 90, posS2 = 90, posS3 = 90, posS4 = 90;
+int posS1, posS2, posS3,posS4;
 int pasoServo = 5; // Incremento de posicion de los servos
   
 
+void setServosInitialState(){
+  posS1 = 97;
+  posS2 = 105;
+  posS3 = 98;
+  posS4 = 82;
+}
+
 void showState(){
-   Serial.println("w acelera los 6 motores");
-   Serial.println("s detiene en seco");
-   Serial.println("x ralentiza los 6 motores");
-   Serial.println("i Mueve los servos para girar a la izquierda \\ \\");
-   Serial.println("                                             / /");
-   Serial.println("o Pone los servos a 0 | |");
-   Serial.println("                      | |");
-   Serial.println("p Mueve los servos para girar a la derecha / /");
-   Serial.println("                                           \\ \\ ");
-   Serial.println("");
+    Serial.println("F Acelera");
+    Serial.println("S STOP");
+    Serial.println("B Decelera");
+    Serial.println("L Giro izquierda \\ \\");
+    Serial.println("                 / /");
+    Serial.println("O Ruedas Rectas  | |");
+    Serial.println("                 | |");
+    Serial.println("R Giro derecha   / /");
+    Serial.println("                 \\ \\ ");
+    Serial.println("");
     Serial.print("velocidad = ");
     Serial.println(velocidad);
     Serial.print("S1,S4 = ");
@@ -121,29 +133,34 @@ void showState(){
     Serial.println(posS2); 
 }
 
+void setState(){
+    s1.write(posS1);
+    s2.write(posS2);
+    s3.write(posS3);
+    s4.write(posS4);
+    
+    // Establecemos la velocidad
+    
+    setSpeed(M1_1,M1_2, velocidad);
+    setSpeed(M2_1,M2_2, velocidad);
+}
 
 void loop(){
 
 /*
-
 Control de velocidad y giro por movimiento
-   w
-   s 
-   x
-
-**w** acelera los 6 motores
-**s** detiene en seco
-**x** ralentiza los 6 motores
+  w acelera los 6 motores
+  s detiene en seco
+  x ralentiza los 6 motores
 
 Control de giro usando los servos
+i girar a la izquierda \ \
+                       / /
+                       
+o servos rectos a      | |
 
-i Mueve los servos para girar a la izquierda \ \
-                                               / /
-
-o Pone los servos a 0
-
-p Mueve los servos para girar a la derecha / /
-                                           \ \ 
+p girar a la derecha  / /
+                      \ \ 
 */
 
     if(Serial.available()>0){
@@ -152,31 +169,46 @@ p Mueve los servos para girar a la derecha / /
         Serial.print("reading:");
         Serial.println(caracter);
         switch(caracter){
-            case 'i': // Mas giro a la izquierda
+            case 'i':
+            case 'L': // Mas giro a la izquierda
                 posS1 -= pasoServo;
                 posS4 -= pasoServo;
                 posS3 += pasoServo;
                 posS2 += pasoServo;
                 break;
             case 'o':
-                posS1 = 90;
-                posS2 = 90;
-                posS3 = 90;
-                posS4 = 90;
-                break;                
-            case 'p': // Mas giro a la derecha
+            case 'O':
+                setServosInitialState();
+                break;  
+            case 'p':                  
+            case 'R': // Mas giro a la derecha
                 posS1 += pasoServo;
                 posS4 += pasoServo;
                 posS3 -= pasoServo;
                 posS2 -= pasoServo;
                 break;
-            case 'w':
+            case '1':
+                if(velocidad > 0 ) velocidad = 100;
+                else  velocidad = -100;                    
+                break;
+            case '5':
+                if(velocidad > 0 ) velocidad = 150;
+                else  velocidad = -150;                    
+                break;
+            case '9':
+                if(velocidad > 0 ) velocidad = 250;
+                else  velocidad = -250;                    
+                break;                
+            case 'w':  
+            case 'F':
                 velocidad += pasoVelocidad;
                 break;
             case 's':
+            case 'S':
                 velocidad = 0;
-                break;                
-            case 'x':
+                break;  
+            case 'x':                  
+            case 'B':
                 velocidad -= pasoVelocidad;
                 break;
         }
@@ -196,18 +228,10 @@ p Mueve los servos para girar a la derecha / /
         
         // Establecemos las posiciones de los servos
         
-        s1.write(posS1);
-        s2.write(posS2);
-        s3.write(posS3);
-        s4.write(posS4);
-        
-        // Establecemos la velocidad
-        
-        setSpeed(M1_1,M1_2, velocidad);
-        setSpeed(M2_1,M2_2, velocidad);
+        setState();
 
-        
-        showState();       
+        if(Serial.available() == 0)
+          showState();       
         
     }    
 }
