@@ -18,8 +18,8 @@
     M3 S2       S3 M4
 
 L9110
-    M1 9 y 10
-    M2 5 y 6
+    M1 11 y 6
+    M2 5 y 3
  
     
 
@@ -70,7 +70,7 @@ void setup(){
     pinMode(S4,OUTPUT);
 
     // Configuramos las comunicaciones
-    Serial.begin(19200);
+    Serial.begin(9600);
     //bluetooth_de_la_placa.begin(19200);
 
     // Configuramos los servos
