@@ -149,6 +149,12 @@ Controla la velocidad de cada uno de los 6 motores (incrementa/decrementa la vel
 Un switch que reacciona a cada tecla
 Al final del switch se actualizan todos los estados
 
+## Aplicación de control
+
+[Arduino Bluetooth Controler](https://play.google.com/store/apps/details?id=com.satech.arduinocontroller)
+
+
+
 ## Mejoras
 
 Añadir micro-agujeros para los tornillos
