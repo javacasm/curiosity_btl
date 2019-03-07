@@ -20,6 +20,18 @@ A día de hoy conozco 3 modelos a diferente escala
 - 4 x 9g servos
 - 6 x N20 dc motors
 
+### Tornillería (versión alfa)
+
+4 x M2 8mm tornillos (los típicos para sujetar el complemento del servo 9g)
+2 x M3 40 mm  tornillos (conectan los boggies con el tensor de arriba)
+2 x M3 tuercas blocantes
+4 x M4 tornillos 30mm( conectan los boggies)
+1 x M4 tornillo 25mm (conecta tensor con base)
+5 x M4 tuerca blocante
+16 M4 arandelas
+12 x M2 tornillos 15mm (sujeción motores)
+12 x M2 tuercas 
+
 ![escala 1.10](https://bricolabs.cc/wiki/_media/proyectos/curiosity/curiosity_1_800.jpg?w=800&tok=0070ac)
 
 [scale_1_5](https://github.com/felixstdp/curiosity_btl/tree/master/scale_1_5) (Deseando montar uno)
@@ -202,3 +214,5 @@ Añadir micro-agujeros para los tornillos
 ![micuriosity](./images/MiCuriosity.png)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/bJ5WHF31rxU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
