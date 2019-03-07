@@ -138,8 +138,6 @@ Usar al menos un 30-40% de relleno en las partes de las ruedas
 
 ** MUY IMPORTANTE: No podemos usar servos y PWM 9 y 10 al mismo tiempo https://www.luisllamas.es/salidas-analogicas-pwm-en-arduino/ **
 
-
-
 ### V0 Control de velocidad y giro por movimiento
     w acelera los 6 motores
     s detiene en seco
@@ -192,3 +190,15 @@ Al final del switch se actualizan todos los estados
 ## Mejoras
 
 Añadir micro-agujeros para los tornillos
+
+### Vídeos e imágenes
+
+#### Electrónica
+
+![L9110](./images/L9110.jpg)
+
+![electrónica](./images/Electronica.jpg)
+
+![micuriosity](./images/MiCuriosity.png)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/bJ5WHF31rxU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
